@@ -9,7 +9,6 @@ import json
 import sys
 from pathlib import Path
 
-import click
 import typer
 from rich.console import Console
 from rich.panel import Panel
@@ -55,7 +54,7 @@ class ControlXGroup(typer.core.TyperGroup):
     It lives on the group (not in main()) so `controlx` and CliRunner behave identically.
     """
 
-    def invoke(self, ctx: click.Context):  # type: ignore[override]
+    def invoke(self, ctx: typer.Context):  # type: ignore[override]
         try:
             return super().invoke(ctx)
         except ControlXError as exc:

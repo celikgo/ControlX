@@ -17,7 +17,16 @@ from .core.passport import render_inject_bundle, render_passport
 from .core.ports import ApplyResult
 from .errors import NotFoundError, UserError
 
-EXAMPLES_DIR = Path(__file__).resolve().parents[2] / "examples" / "packs"
+
+def _examples_dir() -> Path:
+    """Packaged copy (wheel) first, repo checkout second."""
+    packaged = Path(__file__).resolve().parent / "_examples" / "packs"
+    if packaged.is_dir():
+        return packaged
+    return Path(__file__).resolve().parents[2] / "examples" / "packs"
+
+
+EXAMPLES_DIR = _examples_dir()
 
 
 # --------------------------------------------------------------------------- #
