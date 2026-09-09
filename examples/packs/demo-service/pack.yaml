@@ -1,0 +1,21 @@
+constraints:
+- key: api_style
+  value: REST only
+  rationale: one transport keeps clients and gateways simple
+- key: log_retention
+  value: 90 days
+  rationale: contractual minimum for incident review
+id: pak_demoservice
+instructions_file: instructions.md
+knowledge:
+- id: knw_retention
+  required: true
+  summary: Data retention windows per data class, and who may request deletion.
+  title: Data Retention
+name: Demo Service
+open_questions:
+- Do we need per-tenant encryption keys before the enterprise tier ships?
+- Who owns the deploy canary decision outside business hours?
+provider_variants: {}
+slug: demo-service
+version: 4

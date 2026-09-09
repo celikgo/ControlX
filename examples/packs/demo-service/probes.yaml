@@ -1,0 +1,37 @@
+- id: prb_domainmodel
+  question: How do Tenant and Workspace relate, and which one is the billing boundary?
+  expected_signals:
+  - Tenant is the billing boundary
+  - Workspace belongs to exactly one Tenant
+  weight: 1.0
+- id: prb_errorconv
+  question: What shape does an HTTP error body take, and where do machine readable codes live?
+  expected_signals:
+  - application/problem+json
+  - error code namespace
+  weight: 1.0
+- id: prb_tokenrefresh
+  question: Explain how the client refreshes an access token after a 401.
+  expected_signals:
+  - refreshes on 401
+  - single-flight
+  - rotates the refresh token
+  weight: 1.0
+- id: prb_deploy
+  question: What must happen before and during a production rollout?
+  expected_signals:
+  - Migrations run before rollout
+  - canary at 10%
+  weight: 1.0
+- id: prb_apistyle
+  question: Which API style does this product expose, and is GraphQL allowed?
+  expected_signals:
+  - REST only
+  - GraphQL is not used
+  weight: 1.0
+- id: prb_observability
+  question: What are the logging and tracing requirements for a service?
+  expected_signals:
+  - structured JSON logs
+  - trace id is propagated
+  weight: 1.0

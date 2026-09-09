@@ -1,0 +1,40 @@
+ControlX
+Copyright 2026 ControlX contributors
+
+This product includes software developed by third parties.
+ControlX itself is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+--------------------------------------------------------------------------------
+Runtime dependencies (installed from PyPI, not vendored)
+--------------------------------------------------------------------------------
+  Textual .................. MIT       https://github.com/Textualize/textual
+  Rich ..................... MIT       https://github.com/Textualize/rich
+  Typer .................... MIT       https://github.com/fastapi/typer
+  pydantic ................. MIT       https://github.com/pydantic/pydantic
+  httpx .................... BSD-3     https://github.com/encode/httpx
+  PyYAML ................... MIT       https://github.com/yaml/pyyaml
+  keyring .................. MIT       https://github.com/jaraco/keyring
+  cryptography ............. Apache-2.0 / BSD-3
+                                       https://github.com/pyca/cryptography
+  mcp (optional) ........... MIT       https://github.com/modelcontextprotocol/python-sdk
+
+--------------------------------------------------------------------------------
+Design and prior art we studied, reused ideas from, or interoperate with
+--------------------------------------------------------------------------------
+The ControlX Passport format deliberately mirrors the section language of
+Context Passport so that documents remain mutually ingestible.
+
+  context-passport (macio-arruda)     handoff document sections:
+                                      decisions / open questions / resume prompt
+  vaultex (jysnctcutn)                local markdown vault exposed over MCP
+  opencontext (slxca)                 markdown-first context store
+  local-memory-mcp (ptobey)           local-first MCP memory server
+  memside (memside)                   cross-tool memory hub
+  Agent-Mind-Bridge (brendanlucas01)  agent-to-agent context bridging
+  ContextVolt (Rithvickkr)            conversation capture -> continue prompt
+  cross-llm-mcp (JamesANZ)            multi-LLM calls from a single process
+  k9s / lazygit / btop                dense keyboard-first terminal console UX
+
+No source code from the projects in the second list is vendored into this
+repository. If that changes, the vendored code will live under third_party/
+with its original license header intact and will be listed here.

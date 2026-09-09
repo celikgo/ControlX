@@ -1,0 +1,70 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install
+        run: uv pip install --system -e ".[dev,mcp]"
+
+      - name: Lint
+        run: ruff check src tests
+
+      - name: Format check
+        run: ruff format --check src tests
+
+      - name: Types (core is strict)
+        run: mypy
+
+      - name: Tests
+        run: pytest -q
+        env:
+          # never let a developer's real key leak into a test run
+          OPENAI_API_KEY: ""
+          ANTHROPIC_API_KEY: ""
+          XAI_API_KEY: ""
+
+  golden-path:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv pip install --system -e "."
+      - name: Offline audit -> patch -> re-audit
+        run: |
+          export CONTROLX_HOME="$RUNNER_TEMP/controlx"
+          controlx init
+          controlx pack import examples/packs/demo-service
+          controlx pack import examples/packs/demo-thin
+          # the incomplete target must fail the gate (exit 3)
+          if controlx audit run --source demo-service --target pack:demo-thin --min-score 70; then
+            echo "expected exit 3 for an insufficient target" && exit 1
+          fi
+          controlx patch preview latest
+          controlx patch apply latest --approve
+          # after the patch it must clear the gate
+          controlx audit run --source demo-service --target pack:demo-thin --min-score 70

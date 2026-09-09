@@ -1,0 +1,13 @@
+constraints:
+- key: api_style
+  value: GraphQL first
+  rationale: inherited from the prototype; never revisited
+id: pak_demothin
+instructions_file: instructions.md
+knowledge: []
+name: Demo Thin
+open_questions:
+- Is this project still allowed to expose GraphQL?
+provider_variants: {}
+slug: demo-thin
+version: 1
