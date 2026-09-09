@@ -54,11 +54,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
 
-      - name: Install from a built wheel, not the checkout
+      - name: Install the checkout
         run: |
           uv venv
-          uv build
-          uv pip install dist/*.whl
+          uv pip install -e "."
 
       - name: Offline audit -> patch -> re-audit
         run: |
@@ -75,8 +74,16 @@ jobs:
           # after the patch it must clear the gate
           uv run controlx audit run --source demo-service --target pack:demo-thin --min-score 70
 
+      - name: Build a wheel and install it outside the project
+        # a separate venv, because `uv run` would re-sync the editable checkout
+        # and hide whether the wheel really carries the example packs
+        run: |
+          uv build
+          python3 -m venv "$RUNNER_TEMP/pkg"
+          "$RUNNER_TEMP/pkg/bin/pip" install --quiet dist/*.whl
+
       - name: The packaged demo must run without the repo's examples/ folder
         run: |
           export CONTROLX_HOME="$RUNNER_TEMP/controlx-packaged"
-          mv examples /tmp/examples-moved
-          uv run controlx demo
+          mv examples "$RUNNER_TEMP/examples-moved"
+          "$RUNNER_TEMP/pkg/bin/controlx" demo
