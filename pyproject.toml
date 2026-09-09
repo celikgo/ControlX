@@ -36,8 +36,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/celikgokhun/controlx"
-Documentation = "https://github.com/celikgokhun/controlx/tree/main/docs"
+Homepage = "https://github.com/celikgo/ControlX"
+Documentation = "https://github.com/celikgo/ControlX/tree/main/docs"
+Issues = "https://github.com/celikgo/ControlX/issues"
 
 [project.scripts]
 controlx = "controlx.cli:main"
