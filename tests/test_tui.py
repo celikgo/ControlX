@@ -27,6 +27,19 @@ async def test_app_boots_and_lists_the_vault(app: ControlXApp):
         assert app.target == "pack:demo-thin"
 
 
+async def test_first_arrow_key_moves_the_cursor(app: ControlXApp):
+    """Regression: a None index on mount swallowed the user's first arrow press."""
+    async with app.run_test() as pilot:
+        await pilot.pause()
+        assert app.query_one("#registry").index == 0
+        first = str(app.query_one("#viewer_body").content)
+
+        await pilot.press("down")
+        await pilot.pause()
+        assert app.query_one("#registry").index == 1
+        assert str(app.query_one("#viewer_body").content) != first
+
+
 async def test_palette_runs_doctor(app: ControlXApp):
     async with app.run_test() as pilot:
         await pilot.press("colon")

@@ -197,7 +197,7 @@ class ControlXApp(App[None]):
         self._preselect()
         self.query_one("#registry").focus()
         self.action_help()
-        self.call_after_refresh(self.action_open)
+        self.call_after_refresh(self._select_first_row)
 
     # -------------------------------------------------------------- helpers --
     def log_line(self, text: str) -> None:
@@ -257,6 +257,17 @@ class ControlXApp(App[None]):
         self._render_status()
 
     # -------------------------------------------------------------- actions --
+    def _select_first_row(self) -> None:
+        """Land the cursor on row 0 once ListView's children exist.
+
+        ListView mounts children asynchronously, so an index set during compose
+        does not stick - and an index of None swallows the user's first arrow key.
+        """
+        listview = self.query_one("#registry", Registry)
+        if self.entries and listview.index is None:
+            listview.index = 0
+        self.action_open()
+
     def action_focus_pane(self, pane: str) -> None:
         self.query_one(f"#{pane}").focus()
 
